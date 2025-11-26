@@ -1,9 +1,15 @@
-void setup() {
-  // put your setup code here, to run once:
+#include <WiFi.h>
+#include <WebServer.h>
+#include <ESPmDNS.h>
 
+WebServer server(80);
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.mode(WIFI_STA);
+  // WiFi credentials will be added later
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
+  server.handleClient();
 }
