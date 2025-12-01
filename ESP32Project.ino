@@ -20,6 +20,8 @@ void setup() {
   Serial.println("\nConnected! IP: " + WiFi.localIP().toString());
 }
 
+if (MDNS.begin("esp32")) Serial.println("MDNS responder started");
+
 void loop() {
   server.handleClient();
 }
