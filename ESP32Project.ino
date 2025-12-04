@@ -11,6 +11,16 @@ const char* ssid = "STEPHE";
 const char* password = "zyqq4921";
 WebServer server(80);
 
+// Sensor functions
+float getLight() { return lightMeter.readLightLevel(); }
+float getBusVoltage() { return ina219.getBusVoltage_V(); }
+float getShuntVoltage() { return ina219.getShuntVoltage_mV(); }
+float getCurrent() { return ina219.getCurrent_mA(); }
+float getPower() { return ina219.getPower_mW(); }
+float getTemperature() { return dht.readTemperature(); }
+float getHumidity() { return dht.readHumidity(); }
+bool dhtOk() { return !isnan(getTemperature()) && !isnan(getHumidity()); }
+
 void setup() {
  Serial.begin(115200);
 
