@@ -2,6 +2,11 @@
 #include <WebServer.h>
 #include <ESPmDNS.h>
 
+//Sensors
+BH1750 lightMeter;
+Adafruit_INA219 ina219;
+
+//WiFi
 const char* ssid = "STEPHE";
 const char* password = "zyqq4921";
 WebServer server(80);
