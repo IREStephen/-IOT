@@ -21,10 +21,17 @@ float getTemperature() { return dht.readTemperature(); }
 float getHumidity() { return dht.readHumidity(); }
 bool dhtOk() { return !isnan(getTemperature()) && !isnan(getHumidity()); }
 
+// Setup
 void setup() {
- Serial.begin(115200);
+  Serial.begin(115200);
+  Wire.begin(21, 22); // SDA, SCL
 
- //WiFi 
+  // Initialize sensors
+  if (!lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE)) Serial.println("BH1750 error");
+  if (!ina219.begin()) Serial.println("INA219 error");
+  dht.begin();
+
+//WiFi 
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   Serial.print("Connecting to WiFi");
@@ -33,10 +40,11 @@ void setup() {
     Serial.print(".");
   }
   Serial.println("\nConnected! IP: " + WiFi.localIP().toString());
+
+  if (MDNS.begin("esp32")) Serial.println("MDNS responder started");
 }
 
-if (MDNS.begin("esp32")) Serial.println("MDNS responder started");
-
+// The Loop
 void loop() {
   server.handleClient();
 }
