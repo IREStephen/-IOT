@@ -32,6 +32,23 @@ float getTemperature() { return dht.readTemperature(); }
 float getHumidity() { return dht.readHumidity(); }
 bool dhtOk() { return !isnan(getTemperature()) && !isnan(getHumidity()); }
 
+// Build HTML for sensors
+String getSensorCards() {
+  String html = "";
+  html += "<div class=\"card\"><div>Light</div><div class=\"value\">" + String(getLight()) + " lx</div></div>";
+  html += "<div class=\"card\"><div>Bus Voltage</div><div class=\"value\">" + String(getBusVoltage()) + " V</div></div>";
+  html += "<div class=\"card\"><div>Shunt Voltage</div><div class=\"value\">" + String(getShuntVoltage()) + " mV</div></div>";
+  html += "<div class=\"card\"><div>Current</div><div class=\"value\">" + String(getCurrent()) + " mA</div></div>";
+  html += "<div class=\"card\"><div>Power</div><div class=\"value\">" + String(getPower()) + " mW</div></div>";
+  if (dhtOk()) {
+    html += "<div class=\"card\"><div>Temperature</div><div class=\"value\">" + String(getTemperature()) + " °C</div></div>";
+    html += "<div class=\"card\"><div>Humidity</div><div class=\"value\">" + String(getHumidity()) + " %</div></div>";
+  } else {
+    html += "<div class=\"card\"><div>DHT11 ERROR</div></div>";
+  }
+  return html;
+}
+
 // Setup
 void setup() {
   Serial.begin(115200);
