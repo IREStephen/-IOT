@@ -49,6 +49,21 @@ String getSensorCards() {
   return html;
 }
 
+// Handlers
+void handleRoot() {
+  String message = homePagePart1 + getSensorCards() + homePagePart2;
+  server.send(200, "text/html", message);
+}
+
+void handleSensors() {
+  String message = getSensorCards();
+  server.send(200, "text/html", message);
+}
+
+void handleNotFound() {
+  server.send(404, "text/plain", "File Not Found");
+}
+
 // Setup
 void setup() {
   Serial.begin(115200);

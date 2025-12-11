@@ -50,4 +50,25 @@ const char homePagePart1[] = R"rawliteral(
   <div class="container" id="sensorContainer">
 )rawliteral";
 
+const char homePagePart2[] = R"rawliteral(
+  </div>
+
+  <script>
+    // Fetch sensor data every 2 seconds
+    function updateSensors() {
+      fetch('/sensors')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('sensorContainer').innerHTML = data;
+        })
+        .catch(err => console.error(err));
+    }
+    setInterval(updateSensors, 2000); // every 2 seconds
+    window.onload = updateSensors; // initial load
+  </script>
+</body>
+</html>
+)rawliteral";
+
+#endif
 
