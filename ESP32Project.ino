@@ -2,6 +2,11 @@
 #include <WebServer.h>
 #include <ESPmDNS.h>
 
+// DHT11 settings
+#define DHTPIN 32
+#define DHTTYPE DHT11
+DHT dht(DHTPIN, DHTTYPE);
+
 //Sensors
 BH1750 lightMeter;
 Adafruit_INA219 ina219;
