@@ -47,6 +47,13 @@ void setup() {
   Serial.println("\nConnected! IP: " + WiFi.localIP().toString());
 
   if (MDNS.begin("esp32")) Serial.println("MDNS responder started");
+
+  // Server routes
+  server.on("/", handleRoot);
+  server.on("/sensors", handleSensors);
+  server.onNotFound(handleNotFound);
+  server.begin();
+  Serial.println("HTTP server started");
 }
 
 // The Loop
