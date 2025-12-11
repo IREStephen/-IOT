@@ -1,6 +1,12 @@
+#include <Wire.h>
+#include <BH1750.h>
+#include <Adafruit_INA219.h>
+#include <DHT.h>
+#include <DHT_U.h>
 #include <WiFi.h>
 #include <WebServer.h>
 #include <ESPmDNS.h>
+#include "homepage.h"
 
 // DHT11 settings
 #define DHTPIN 32
@@ -36,7 +42,7 @@ void setup() {
   if (!ina219.begin()) Serial.println("INA219 error");
   dht.begin();
 
-//WiFi 
+  //WiFi 
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   Serial.print("Connecting to WiFi");
