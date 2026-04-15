@@ -7,6 +7,7 @@ const char homePagePart1[] = R"rawliteral(
 <head>
   <title>ESP32 Sensor Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="30">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -43,10 +44,19 @@ const char homePagePart1[] = R"rawliteral(
       font-weight: bold;
       margin-top: 5px;
     }
+    .status {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px;
+      font-size: 0.9em;
+    }
   </style>
 </head>
 <body>
   <h1>ESP32 Sensor Dashboard</h1>
+  <div class="status"> Data streaming to ThingSpeak every 20s</div>
   <div class="container" id="sensorContainer">
 )rawliteral";
 
@@ -71,4 +81,3 @@ const char homePagePart2[] = R"rawliteral(
 )rawliteral";
 
 #endif
-

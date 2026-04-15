@@ -1,3 +1,4 @@
+// ThingSpeak Channels page: https://thingspeak.mathworks.com/channels
 #include <Wire.h>
 #include <BH1750.h>
 #include <Adafruit_INA219.h>
@@ -7,6 +8,11 @@
 #include <WebServer.h>
 #include <ESPmDNS.h>
 #include "homepage.h"
+
+#include <HTTPClient.h>
+const char* thingSpeakApiKey = "HO9A8A2L142XPVU0";  // Key
+const unsigned long thingSpeakInterval = 20000;      // Send data every 20 seconds 
+unsigned long lastThingSpeakUpdate = 0;
 
 // DHT11 settings
 #define DHTPIN 32
@@ -31,6 +37,44 @@ float getPower() { return ina219.getPower_mW(); }
 float getTemperature() { return dht.readTemperature(); }
 float getHumidity() { return dht.readHumidity(); }
 bool dhtOk() { return !isnan(getTemperature()) && !isnan(getHumidity()); }
+
+// ThingSpeak Function
+void sendToThingSpeak() {
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    
+    // Read all sensor values
+    float light = getLight();
+    float busV = getBusVoltage();
+    float shuntV = getShuntVoltage();
+    float current = getCurrent();
+    float power = getPower();
+    float temp = getTemperature();
+    float hum = getHumidity();
+    
+    // URL with 8 ThingSpeak fields
+    String url = "http://api.thingspeak.com/update?api_key=" + String(thingSpeakApiKey);
+    url += "&field1=" + String(light);
+    url += "&field2=" + String(busV);
+    url += "&field3=" + String(shuntV);
+    url += "&field4=" + String(current);
+    url += "&field5=" + String(power);
+    url += "&field6=" + String(temp);
+    url += "&field7=" + String(hum);
+    
+    Serial.println("Sending to ThingSpeak...");
+    
+    http.begin(url);
+    int httpCode = http.GET();
+    
+    if (httpCode > 0) {
+      Serial.println("ThingSpeak update successful! HTTP code: " + String(httpCode));
+    } else {
+      Serial.println("ThingSpeak update failed! Error: " + String(http.errorToString(httpCode).c_str()));
+    }
+    http.end();
+  }
+}
 
 // Build HTML for sensors
 String getSensorCards() {
@@ -92,9 +136,17 @@ void setup() {
   server.onNotFound(handleNotFound);
   server.begin();
   Serial.println("HTTP server started");
+  Serial.println("ThingSpeak integration ready!");
 }
 
 // The Loop
 void loop() {
   server.handleClient();
+  
+  // ThingSpeak Updater
+  unsigned long currentMillis = millis();
+  if (currentMillis - lastThingSpeakUpdate >= thingSpeakInterval) {
+    sendToThingSpeak();
+    lastThingSpeakUpdate = currentMillis;
+  }
 }
